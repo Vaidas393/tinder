@@ -860,25 +860,25 @@ window.onload = () => {
   })
 
   // story slider
-  let storySlider = document.querySelector(".story-slide");
-  if (storySlider) {
-    var swiper = new Swiper(storySlider, {
-      slidesPerView: 1,
-      effect: "cards",
-      grabCursor: true,
-      autoplay: {
-        delay: 10000,
-      },
-      pagination: {
-        el: ".story-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".story-swiper-next",
-        prevEl: ".story-swiper-prev",
-      },
-    });
-  }
+  // let storySlider = document.querySelector(".story-slide");
+  // if (storySlider) {
+  //   var swiper = new Swiper(storySlider, {
+  //     slidesPerView: 1,
+  //     effect: "cards",
+  //     grabCursor: true,
+  //     autoplay: {
+  //       delay: 10000,
+  //     },
+  //     pagination: {
+  //       el: ".story-pagination",
+  //       clickable: true,
+  //     },
+  //     navigation: {
+  //       nextEl: ".story-swiper-next",
+  //       prevEl: ".story-swiper-prev",
+  //     },
+  //   });
+  // }
 
   // input range slider
   const minRange = document.getElementById("minRange");
