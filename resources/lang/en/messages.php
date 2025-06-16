@@ -1,0 +1,92 @@
+<?php
+
+return [
+
+    // Auth & Registration
+    'sign_in' => 'Sign in',
+    'create_account' => 'Create Account',
+    'find_partner' => 'Find Your Partner',
+    'email_address' => 'Email Address',
+    'email_placeholder' => 'yourname@gmail.com',
+    'username' => 'Username',
+    'username_placeholder' => 'your_username',
+    'password' => 'Password',
+    'password_placeholder' => 'Enter password',
+    'confirm_password' => 'Confirm Password',
+    'confirm_password_placeholder' => 'Repeat password',
+    'sign_up' => 'Sign up',
+    'already_registered' => 'Already registered? Login',
+    'show_password' => 'Show password',
+    'hide_password' => 'Hide password',
+
+    // Validation feedback
+    'email_valid_feedback' => 'Looks good!',
+    'email_invalid_feedback' => 'Please enter a valid email.',
+    'username_valid_feedback' => 'Looks good!',
+    'username_invalid_feedback' => 'Please enter a valid username (min 3 characters).',
+    'password_valid_feedback' => 'Looks good!',
+    'password_invalid_feedback' => 'Password must be at least 6 characters.',
+    'confirm_password_valid_feedback' => 'Looks good!',
+    'confirm_password_invalid_feedback' => 'Passwords do not match.',
+
+    // City selection (Step 2)
+    'select_city' => 'Select City',
+    'search_city' => 'Search City',
+
+    // Gender selection (Step 3)
+    'whats_your_gender' => 'What’s Your Gender',
+    'male' => 'Male',
+    'female' => 'Female',
+
+    // Profile details (Step 4)
+    'profile_details' => 'Profile Details',
+    'age' => 'Age',
+    'height' => 'Height (cm)',
+    'weight' => 'Weight (kg)',
+    'size' => 'Size (cm)',
+    'position' => 'Position',
+    'select_position' => 'Select Position',
+    'position_top' => 'Top',
+    'position_bottom' => 'Bottom',
+    'position_versatile' => 'Versatile',
+
+    // Positions map (optional, if you want to use keys)
+    'positions' => [
+        'top' => 'Top',
+        'bottom' => 'Bottom',
+        'versatile' => 'Versatile',
+    ],
+
+    // Buttons & General
+    'next' => 'Next',
+    'back' => 'Back',
+    'submit' => 'Submit',
+    'upload_photos' => 'Upload Your Photos',
+    'upload_image' => 'Upload Image',
+    'upload_photos' => 'Upload Your Photos',
+'upload_image'  => 'Upload Image',
+'add'           => 'Add',
+'photo_required' => 'At least one photo is required.',
+'welcome_back' => 'Welcome Back!',
+    'welcome_back_subtitle' => 'Welcome back, we missed you',
+    'email_address' => 'Email Address',
+    'password' => 'Password',
+    'sign_in' => 'Sign in',
+    'forgot_password' => 'Forgot your password?',
+    'invalid_credentials' => 'Invalid email or password.',
+    'forgot_password_title' => 'Forgot Password?',
+'forgot_password_subtitle' => 'Enter your email and we’ll send you reset instructions.',
+'send_password_link' => 'Send Password Reset Link',
+'back_to_login' => 'Back to Login',
+'confirm_password_title' => 'Confirm Password',
+'confirm_password_subtitle' => 'This is a secure area. Please confirm your password before continuing.',
+'confirm' => 'Confirm',
+'back_to_login' => 'Back to Login',
+'verify_email_title' => 'Verify Your Email',
+'verify_email_subtitle' => 'Thanks for signing up! Please verify your email address by clicking the link we just sent you. If you didn’t receive it, we’ll send you another.',
+'verification_link_sent' => 'A new verification link has been sent to your email address.',
+'resend_verification_email' => 'Resend Verification Email',
+'logout' => 'Log Out',
+'homepage_welcome' => 'Start Swiping!',
+
+];

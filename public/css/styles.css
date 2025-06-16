@@ -1,0 +1,11 @@
+.input-area .form-control:focus,
+.input-box input.form-control:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #ccc;
+}
+
+.input-area .form-control:focus {
+  border-color: #ff4081;
+  box-shadow: 0 0 0 0.2rem rgba(255, 64, 129, .25);
+}
