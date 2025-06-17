@@ -7,6 +7,9 @@ use App\Livewire\AccountSetup\Step3;
 use App\Livewire\AccountSetup\Step4;
 use App\Livewire\AccountSetup\Step5;
 use App\Livewire\HomePage;
+use App\Livewire\EditProfile;
+use App\Livewire\LoveMatches;
+use App\Http\Middleware\SetUserLocale;
 
 // Public homepage
 Route::get('/', function () {
@@ -33,9 +36,11 @@ Route::middleware('guest')->group(function () {
 });
 
 // Authenticated routes
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', SetUserLocale::class])->group(function () {
     Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
     Route::get('/home', HomePage::class)->name('home');
+    Route::get('/editprofile', EditProfile::class)->name('editProfile');
+    Route::get('/matches', LoveMatches::class)->name('matches');
 
     // Profile routes
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');

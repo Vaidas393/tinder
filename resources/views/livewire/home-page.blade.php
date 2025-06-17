@@ -1,5 +1,5 @@
 <div>
-<section class="home-page position-relative pb-120 z-1 overflow-hidden">
+<section class="home-page position-relative z-1 overflow-hidden">
   <div class="container px-0">
     <div class="header-area mt-5 mb-3 px-3">
       <div class="d-between">
@@ -39,6 +39,16 @@
               <span>{{ $user->size }} cm</span>
               <span>{{ $user->position }}</span>
             </div>
+            <!-- Like/Dislike buttons -->
+            <div class="d-flex justify-content-center gap-5">
+              <button wire:click="like('dislike')" class="story-btn">
+                <i class="bi bi-x-lg fs-2"></i>
+              </button>
+              <button wire:click="like('like')" class="story-btn">
+                <i class="bi bi-suit-heart-fill fs-2"></i>
+              </button>
+            </div>
+
           </div>
           <div class="carousel-indicators mb-0" style="position: relative; top: 0; bottom: unset; margin-bottom: 10px; z-index: 3;">
             @foreach($photos as $i => $photo)
@@ -71,15 +81,6 @@
         </div>
       </div>
 
-      <!-- Like/Dislike buttons -->
-      <div class="d-flex justify-content-center gap-5 mt-4">
-        <button wire:click="like('dislike')" class="story-btn">
-          <i class="bi bi-x-lg fs-2"></i>
-        </button>
-        <button wire:click="like('like')" class="story-btn">
-          <i class="bi bi-suit-heart-fill fs-2"></i>
-        </button>
-      </div>
 
       <div class="text-center mt-2">
         User {{ $users->currentPage() }} of {{ $users->lastPage() }}
@@ -88,6 +89,8 @@
       <p class="text-center">No more users found.</p>
     @endif
   </div>
+  @include('partials.bottom-navbar')
+
 </section>
 <!-- Bootstrap JS (required for carousel) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

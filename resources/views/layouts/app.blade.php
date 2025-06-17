@@ -41,6 +41,7 @@
     <script src="{{ asset('js/swiper.min.js') }}"></script>
     <script src="{{ asset('js/nice-select.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/myjs.js') }}"></script>
 
 </body>
 </html>
