@@ -3,21 +3,6 @@
   <span class="gradient-circle-4 position-fixed"></span>
   <div class="container px-3">
 
-    {{-- header --}}
-    <div class="header-area mt-5 mb-4">
-      <div class="d-between">
-        <div class="profile-thumb d-flex align-items-center gap-2">
-          <div class="img-area active" style="width: 60px; height: 60px;">
-            <img class="w-100 h-100 rounded-circle" src="{{ Auth::user()->photo1 ? asset('storage/'.Auth::user()->photo1) : asset('assets/img/mr-x.png') }}" alt="me">
-          </div>
-          <span class="fs-sm tcn-700">{{ Auth::user()->username }}</span>
-        </div>
-        <div class="line-bar rounded bgp2-50 py-1 px-2">
-          <i class="bi bi-text-center fs-lg tcp-2-300"></i>
-        </div>
-      </div>
-    </div>
-
     {{-- nav pills --}}
     <ul class="nav nav-pills justify-content-between mb-3" role="tablist">
       @foreach(['all' => 'All', 'like' => 'Like', 'likeSent' => 'Like Sent', 'dislike' => 'Dislike', 'match' => 'Match'] as $key => $label)

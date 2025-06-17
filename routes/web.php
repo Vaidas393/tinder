@@ -9,6 +9,7 @@ use App\Livewire\AccountSetup\Step5;
 use App\Livewire\HomePage;
 use App\Livewire\EditProfile;
 use App\Livewire\LoveMatches;
+use App\Livewire\NotificationsPage;
 use App\Http\Middleware\SetUserLocale;
 
 // Public homepage
@@ -41,6 +42,7 @@ Route::middleware(['auth', 'verified', SetUserLocale::class])->group(function ()
     Route::get('/home', HomePage::class)->name('home');
     Route::get('/editprofile', EditProfile::class)->name('editProfile');
     Route::get('/matches', LoveMatches::class)->name('matches');
+    Route::get('/notifications', NotificationsPage::class)->name('notifications');
 
     // Profile routes
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');

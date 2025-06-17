@@ -1,21 +1,6 @@
 <div>
 <section class="home-page position-relative z-1 overflow-hidden">
   <div class="container px-0">
-    <div class="header-area mt-5 mb-3 px-3">
-      <div class="d-between">
-        <a href="account.html">
-          <div class="profile-thumb d-flex align-items-center gap-2">
-            <div class="img-area active">
-              <img class="w-100" src="images/mr-x.png" alt="user">
-            </div>
-            <span class="fs-sm tcn-700">Jon L.</span>
-          </div>
-        </a>
-        <div class="line-bar rounded bgp2-50 py-1 px-2">
-          <i class="bi bi-text-center fs-lg tcp-2-300"></i>
-        </div>
-      </div>
-    </div>
 
     @if($users->count())
       @php

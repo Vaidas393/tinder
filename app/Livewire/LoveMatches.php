@@ -6,6 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Like;
+use App\Models\Notification;
 
 class LoveMatches extends Component
 {
@@ -45,12 +46,27 @@ class LoveMatches extends Component
     {
         $me = Auth::user();
 
+        // Save like/dislike
         Like::updateOrCreate(
             ['user_id' => $me->id, 'target_user_id' => $targetId],
-            ['type'    => $type]
+            ['type' => $type]
         );
 
-        // Refresh the component from the front-end side
+        // Determine if it's a mutual match
+        $hasMutualLike = Like::where('user_id', $targetId)
+                             ->where('target_user_id', $me->id)
+                             ->where('type', 'like')
+                             ->exists();
+
+        $notifType = ($type === 'like' && $hasMutualLike) ? 'match' : $type;
+
+        Notification::create([
+            'user_id'      => $targetId,       // receiver
+            'from_user_id' => $me->id,         // sender
+            'type'         => $notifType,
+        ]);
+
+        // Optional: you could also play sound or refresh UI
         $this->dispatch('reload');
     }
 

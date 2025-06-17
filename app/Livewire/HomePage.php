@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Like;
+use App\Models\Notification;
 
 class HomePage extends Component
 {
@@ -18,20 +19,33 @@ class HomePage extends Component
     public function like($type)
     {
         $users = User::where('id', '!=', auth()->id())
-            ->whereDoesntHave('likedBy', function($q) {
-                $q->where('user_id', auth()->id());
-            })
+            ->whereDoesntHave('likedBy', fn($q) => $q->where('user_id', auth()->id()))
             ->latest()
             ->paginate(1, ['*'], 'page', $this->page);
+
         $currentUser = $users->first();
+
         if ($currentUser) {
-            Like::updateOrCreate([
-                'user_id' => auth()->id(),
-                'target_user_id' => $currentUser->id,
-            ], [
-                'type' => $type
+            $me = auth()->user();
+            $like = Like::updateOrCreate(
+                ['user_id' => $me->id, 'target_user_id' => $currentUser->id],
+                ['type' => $type]
+            );
+
+            $alreadyLikedMe = Like::where('user_id', $currentUser->id)
+                                  ->where('target_user_id', $me->id)
+                                  ->where('type', 'like')
+                                  ->exists();
+
+            $notifType = $alreadyLikedMe && $type === 'like' ? 'match' : $type;
+
+            Notification::create([
+                'user_id' => $currentUser->id, // Receiver
+                'from_user_id' => $me->id,
+                'type' => $notifType,
             ]);
         }
+
         $this->page++;
     }
 
