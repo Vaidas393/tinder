@@ -87,4 +87,12 @@ class User extends Authenticatable
         ->wherePivot('type', 'dislike')
         ->withTimestamps();
     }
+
+    /**
+     * Users who have liked/disliked this user.
+     */
+    public function likedBy()
+    {
+        return $this->hasMany(Like::class, 'target_user_id');
+    }
 }

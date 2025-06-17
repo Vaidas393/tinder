@@ -31,6 +31,11 @@
                     <input type="file" class="input-file" accept="image/*" wire:model="photo1" hidden>
                   </label>
                 </div>
+                @if ($photo1)
+                  <div class="preview-img mt-2 text-center">
+                    <img src="{{ $photo1->temporaryUrl() }}" alt="Preview" style="max-width: 100px; max-height: 100px; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                  </div>
+                @endif
               </div>
             </div>
           </div>
@@ -42,6 +47,11 @@
                 <i class="bi bi-camera text-gradient camera-icon"></i><span>{{ __('messages.add') }}</span>
                 <input type="file" class="input-file" accept="image/*" wire:model="photo2" hidden>
               </label>
+              @if ($photo2)
+                <div class="preview-img mt-2 text-center">
+                  <img src="{{ $photo2->temporaryUrl() }}" alt="Preview" style="max-width: 100px; max-height: 100px; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                </div>
+              @endif
             </div>
           </div>
 
@@ -52,6 +62,11 @@
                 <i class="bi bi-camera text-gradient camera-icon"></i><span>{{ __('messages.add') }}</span>
                 <input type="file" class="input-file" accept="image/*" wire:model="photo3" hidden>
               </label>
+              @if ($photo3)
+                <div class="preview-img mt-2 text-center">
+                  <img src="{{ $photo3->temporaryUrl() }}" alt="Preview" style="max-width: 100px; max-height: 100px; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                </div>
+              @endif
             </div>
           </div>
 

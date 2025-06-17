@@ -1,3 +1,4 @@
+<div>
 <section class="home-page position-relative pb-120 z-1 overflow-hidden">
   <div class="container px-0">
     <div class="header-area mt-5 mb-3 px-3">
@@ -22,53 +23,60 @@
         $photos = array_filter([$user->photo1, $user->photo2, $user->photo3]);
       @endphp
 
-      <!-- Photo-only Swiper -->
-      <div class="swiper photo-slider">
-        <div class="swiper-wrapper">
-          @foreach($photos as $photo)
-            <div class="swiper-slide">
-              <div class="phone-container">
-                <div class="image-container">
-                  <img src="{{ asset('storage/'.$photo) }}" alt="{{ $user->username }}">
-                </div>
-                <div class="user-info px-3 py-2">
-                  <div class="d-flex align-items-center gap-1 mb-2">
-                    <h3>{{ $user->username }}</h3>
-                    <span>{{ $user->age }}</span>
-                    <span>{{ ucfirst($user->gender) }}</span>
+      <!-- Bootstrap Carousel for user images, styled as a mobile card -->
+      <div class="d-flex justify-content-center">
+        <div class="card shadow-lg" style="width: 340px; border-radius: 2.5rem; overflow: hidden;">
+          <div id="userPhotoCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              @foreach($photos as $i => $photo)
+                <div class="carousel-item @if($i === 0) active @endif">
+                  <div class="phone-container" style="background: #f8f9fa; border-radius: 2.5rem;">
+                    <div class="image-container" style="height: 420px; display: flex; align-items: center; justify-content: center;">
+                      <img src="{{ asset('storage/'.$photo) }}" class="d-block" alt="{{ $user->username }}" style="max-width: 90%; max-height: 90%; border-radius: 1.5rem; box-shadow: 0 4px 24px rgba(0,0,0,0.10);">
+                    </div>
+                    <div class="user-info px-3 py-2 text-center">
+                      <div class="d-flex align-items-center gap-1 mb-2 justify-content-center">
+                        <h3 class="mb-0">{{ $user->username }}</h3>
+                        <span>{{ $user->age }}</span>
+                        <span>{{ ucfirst($user->gender) }}</span>
+                      </div>
+                      <div class="d-flex flex-wrap gap-2 small justify-content-center">
+                        <span><i class="bi bi-geo-alt"></i> {{ $user->city }}</span>
+                        <span>{{ $user->height }} cm</span>
+                        <span>{{ $user->weight }} kg</span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="d-flex flex-wrap gap-2 small">
-                    <span><i class="bi bi-geo-alt"></i> {{ $user->city }}</span>
-                    <span>{{ $user->height }} cm</span>
-                    <span>{{ $user->weight }} kg</span>
-                    <!-- <span>{{ $user->size }} cm</span> -->
-                    <!-- <span>{{ ucfirst($user->position) }}</span> -->
-                  </div>
                 </div>
-              </div>
+              @endforeach
             </div>
-          @endforeach
+            @if(count($photos) > 1)
+            <button class="carousel-control-prev" type="button" data-bs-target="#userPhotoCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#userPhotoCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+            @endif
+            <div class="carousel-indicators mb-0" style="bottom: -20px;">
+              @foreach($photos as $i => $photo)
+                <button type="button" data-bs-target="#userPhotoCarousel" data-bs-slide-to="{{ $i }}" @if($i === 0) class="active" aria-current="true" @endif aria-label="Slide {{ $i+1 }}"></button>
+              @endforeach
+            </div>
+          </div>
         </div>
-        <div class="swiper-pagination photo-pagination"></div>
       </div>
 
-      <!-- User navigation (full page reload) -->
+      <!-- Like/Dislike buttons -->
       <div class="d-flex justify-content-center gap-5 mt-4">
-        @if($users->previousPageUrl())
-          <a href="{{ $users->previousPageUrl() }}" class="story-btn">
-            <i class="bi bi-x-lg fs-2"></i>
-          </a>
-        @else
-          <button class="story-btn disabled"><i class="bi bi-x-lg fs-2"></i></button>
-        @endif
-
-        @if($users->nextPageUrl())
-          <a href="{{ $users->nextPageUrl() }}" class="story-btn">
-            <i class="bi bi-suit-heart-fill fs-2"></i>
-          </a>
-        @else
-          <button class="story-btn disabled"><i class="bi bi-suit-heart-fill fs-2"></i></button>
-        @endif
+        <button wire:click="like('dislike')" class="story-btn">
+          <i class="bi bi-x-lg fs-2"></i>
+        </button>
+        <button wire:click="like('like')" class="story-btn">
+          <i class="bi bi-suit-heart-fill fs-2"></i>
+        </button>
       </div>
 
       <div class="text-center mt-2">
@@ -79,25 +87,6 @@
     @endif
   </div>
 </section>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // hide preloader
-  setTimeout(() => {
-    const pre = document.getElementById('preloader')
-    if (pre) pre.style.display = 'none'
-  }, 500)
-
-  // initialize only the photo swiper
-  new Swiper('.photo-slider', {
-    slidesPerView: 1,
-    effect: 'cards',
-    grabCursor: true,
-    loop: false,
-    pagination: {
-      el: '.photo-pagination',
-      clickable: true
-    }
-  })
-})
-</script>
+<!-- Bootstrap JS (required for carousel) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>

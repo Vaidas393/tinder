@@ -9,7 +9,12 @@ use App\Livewire\AccountSetup\Step5;
 use App\Livewire\HomePage;
 
 // Public homepage
-Route::get('/', fn () => redirect()->route('login'));
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('home');
+    }
+    return redirect()->route('login');
+});
 
 // Guest-only routes (registration steps)
 Route::middleware('guest')->group(function () {
