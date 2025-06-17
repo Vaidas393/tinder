@@ -41,8 +41,8 @@
                     <span><i class="bi bi-geo-alt"></i> {{ $user->city }}</span>
                     <span>{{ $user->height }} cm</span>
                     <span>{{ $user->weight }} kg</span>
-                    <span>{{ $user->size }} cm</span>
-                    <span>{{ ucfirst($user->position) }}</span>
+                    <!-- <span>{{ $user->size }} cm</span> -->
+                    <!-- <span>{{ ucfirst($user->position) }}</span> -->
                   </div>
                 </div>
               </div>
