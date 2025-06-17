@@ -27,23 +27,26 @@ class HomePage extends Component
 
         if ($currentUser) {
             $me = auth()->user();
-            $like = Like::updateOrCreate(
+
+            Like::updateOrCreate(
                 ['user_id' => $me->id, 'target_user_id' => $currentUser->id],
                 ['type' => $type]
             );
 
-            $alreadyLikedMe = Like::where('user_id', $currentUser->id)
-                                  ->where('target_user_id', $me->id)
-                                  ->where('type', 'like')
-                                  ->exists();
+            if ($type === 'like') {
+                $alreadyLikedMe = Like::where('user_id', $currentUser->id)
+                                      ->where('target_user_id', $me->id)
+                                      ->where('type', 'like')
+                                      ->exists();
 
-            $notifType = $alreadyLikedMe && $type === 'like' ? 'match' : $type;
+                $notifType = $alreadyLikedMe ? 'match' : 'like';
 
-            Notification::create([
-                'user_id' => $currentUser->id, // Receiver
-                'from_user_id' => $me->id,
-                'type' => $notifType,
-            ]);
+                Notification::create([
+                    'user_id' => $currentUser->id,
+                    'from_user_id' => $me->id,
+                    'type' => $notifType,
+                ]);
+            }
         }
 
         $this->page++;

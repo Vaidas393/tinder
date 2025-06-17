@@ -11,6 +11,8 @@ use App\Livewire\EditProfile;
 use App\Livewire\LoveMatches;
 use App\Livewire\NotificationsPage;
 use App\Http\Middleware\SetUserLocale;
+use App\Models\Conversation;
+use App\Livewire\ChatBox;
 
 // Public homepage
 Route::get('/', function () {
@@ -19,6 +21,7 @@ Route::get('/', function () {
     }
     return redirect()->route('login');
 });
+Route::middleware(['auth'])->get('/chat/{conversation}', ChatBox::class)->name('chat.box');
 
 // Guest-only routes (registration steps)
 Route::middleware('guest')->group(function () {

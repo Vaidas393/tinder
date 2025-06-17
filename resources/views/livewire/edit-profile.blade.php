@@ -17,56 +17,36 @@
         <form wire:submit.prevent="saveProfile">
 
           <div class="grid-container mb-4">
-              <!-- Photo 1 -->
-              <div class="grid-item1 grid-area position-relative">
-                  <div class="add-profile position-relative">
-                      <div class="upload">
-                          <label class="gradient-btn fs-xs">
+              @foreach (['photo1' => 'preview1.png', 'photo2' => 'preview2.png', 'photo3' => 'preview3.png'] as $photoField => $defaultPreview)
+                  <div class="grid-item{{ ltrim($photoField, 'photo') }} grid-area position-relative">
+                      <div class="upload text-center">
+                          <label class="{{ $photoField === 'photo1' ? 'gradient-btn fs-xs' : 'btn-2 mb-2' }}">
                               <i class="bi bi-camera text-gradient camera-icon"></i>
-                              <span class="text-nowrap">{{ __('messages.upload_image') }}</span>
-                              <input type="file" wire:model="photo1" class="input-file" accept="image/*" hidden>
+                              <span class="text-nowrap">{{ __('messages.' . ($photoField === 'photo1' ? 'upload_image' : 'add')) }}</span>
+                              <input type="file" wire:model="{{ $photoField }}" class="input-file" accept="image/*" hidden>
                           </label>
-                          @if ($user->photo1)
-                              <img class="preview-img preview-big" src="{{ asset('storage/' . $user->photo1) }}" alt="{{ __('messages.photo') }} 1">
-                          @else
-                              <img class="preview-img preview-big" src="{{ asset('assets/img/preview1.png') }}" alt="{{ __('messages.photo') }} 1">
-                          @endif
+
+                          @php
+                              $photoPath = $user->{$photoField};
+                              $previewImage = $photoPath ? asset('storage/' . $photoPath) : asset('assets/img/' . $defaultPreview);
+                          @endphp
+
+                          <div class="position-relative">
+                              <img class="preview-img {{ $photoField === 'photo1' ? 'preview-big' : 'preview-small' }}" src="{{ $previewImage }}" alt="{{ __('messages.photo') }} {{ ltrim($photoField, 'photo') }}">
+
+                              @if ($photoPath)
+                                  <button type="button" wire:click="deletePhoto('{{ $photoField }}')" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1" title="{{ __('messages.delete_photo') }}">
+                                      <i class="bi bi-x"></i>
+                                  </button>
+                              @endif
+                          </div>
+
+                          @error($photoField)
+                              <div class="text-danger small text-center mt-1">{{ $message }}</div>
+                          @enderror
                       </div>
-                      @error('photo1') <div class="text-danger small text-center mt-1">{{ $message }}</div> @enderror
                   </div>
-              </div>
-
-              <!-- Photo 2 -->
-              <div class="grid-item2 grid-area position-relative">
-                  <div class="upload">
-                      <label class="btn-2 mb-2">
-                          <i class="bi bi-camera text-gradient camera-icon"></i><span>{{ __('messages.add') }}</span>
-                          <input type="file" wire:model="photo2" class="input-file" accept="image/*" hidden>
-                      </label>
-                      @if ($user->photo2)
-                          <img class="preview-img preview-small" src="{{ asset('storage/' . $user->photo2) }}" alt="{{ __('messages.photo') }} 2">
-                      @else
-                          <img class="preview-img preview-small" src="{{ asset('assets/img/preview2.png') }}" alt="{{ __('messages.photo') }} 2">
-                      @endif
-                  </div>
-                  @error('photo2') <div class="text-danger small text-center mt-1">{{ $message }}</div> @enderror
-              </div>
-
-              <!-- Photo 3 -->
-              <div class="grid-item3 grid-area position-relative">
-                  <div class="upload">
-                      <label class="btn-2 mb-2">
-                          <i class="bi bi-camera text-gradient camera-icon"></i><span>{{ __('messages.add') }}</span>
-                          <input type="file" wire:model="photo3" class="input-file" accept="image/*" hidden>
-                      </label>
-                      @if ($user->photo3)
-                          <img class="preview-img preview-small" src="{{ asset('storage/' . $user->photo3) }}" alt="{{ __('messages.photo') }} 3">
-                      @else
-                          <img class="preview-img preview-small" src="{{ asset('assets/img/preview3.png') }}" alt="{{ __('messages.photo') }} 3">
-                      @endif
-                  </div>
-                  @error('photo3') <div class="text-danger small text-center mt-1">{{ $message }}</div> @enderror
-              </div>
+              @endforeach
           </div>
 
 
@@ -206,4 +186,5 @@ $this->city) selected @endif>{{ $c }}</option>
             </div>
         </form>
     </div>
+    
 </section>

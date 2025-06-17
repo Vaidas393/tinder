@@ -22,9 +22,11 @@ class NotificationsPage extends Component
 
         if ($notif && $notif->user_id === auth()->id()) {
             $notif->delete();
+            $this->dispatch('reload');
+
         }
     }
-    
+
     public function render()
     {
         $notifications = Notification::where('user_id', Auth::id())

@@ -111,6 +111,22 @@ class EditProfile extends Component
 
         return redirect()->route('editProfile');
     }
+    
+    public function deletePhoto(string $photoKey)
+    {
+        if (!in_array($photoKey, ['photo1', 'photo2', 'photo3'])) {
+            return;
+        }
+
+        if ($this->user->{$photoKey}) {
+            // Delete file from storage
+            Storage::disk('public')->delete($this->user->{$photoKey});
+
+            // Remove from DB and reset Livewire state
+            $this->user->update([$photoKey => null]);
+            $this->{$photoKey} = null;
+        }
+    }
 
     public function deleteProfile()
     {

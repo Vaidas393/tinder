@@ -7,67 +7,113 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Like;
 use App\Models\Notification;
+use App\Models\Conversation;
 
 class LoveMatches extends Component
 {
     public string $tab = 'match';
+
     public array $users = [
         'all'       => [],
         'like'      => [],
         'likeSent'  => [],
-        'dislike'   => [],   // added
+        'dislike'   => [],
         'match'     => [],
     ];
 
-
-    public function mount()
+    public function mount(): void
     {
-        $me = Auth::user();
-
-        $all      = User::where('id', '!=', $me->id)->get();
-        $received = $me->likesReceived()->pluck('user_id')->toArray();
-        $sent     = $me->likesGiven()->pluck('target_user_id')->toArray();
-        $disliked = $me->dislikesGiven()->pluck('target_user_id')->toArray();  // fetch
-        $mutual   = array_intersect($received, $sent);
-
-        $this->users['all']       = $all;
-        $this->users['like']      = User::whereIn('id', $received)->get();
-        $this->users['likeSent']  = User::whereIn('id', $sent)->get();
-        $this->users['dislike']   = User::whereIn('id', $disliked)->get();       // assign
-        $this->users['match']     = User::whereIn('id', $mutual)->get();
+        $this->tab = session('current_tab', 'match');
+        $this->loadUsers();
     }
 
-    public function setTab(string $tab)
+    public function setTab(string $tab): void
     {
         $this->tab = $tab;
+        session()->put('current_tab', $tab);
+        $this->dispatch('reload');
+        // $this->loadUsers();
+
     }
 
-    public function react(int $targetId, string $type)
+    public function react(int $targetId, string $type): void
     {
         $me = Auth::user();
 
-        // Save like/dislike
+        if (!$me || $me->id === $targetId || !in_array($type, ['like', 'dislike'])) {
+            return;
+        }
+
+        // Like or Dislike the user
         Like::updateOrCreate(
             ['user_id' => $me->id, 'target_user_id' => $targetId],
             ['type' => $type]
         );
 
-        // Determine if it's a mutual match
-        $hasMutualLike = Like::where('user_id', $targetId)
-                             ->where('target_user_id', $me->id)
-                             ->where('type', 'like')
-                             ->exists();
+        // Only check for mutual like if this is a 'like'
+        $isMutualLike = false;
 
-        $notifType = ($type === 'like' && $hasMutualLike) ? 'match' : $type;
+        if ($type === 'like') {
+            $isMutualLike = Like::where('user_id', $targetId)
+                ->where('target_user_id', $me->id)
+                ->where('type', 'like')
+                ->exists();
 
-        Notification::create([
-            'user_id'      => $targetId,       // receiver
-            'from_user_id' => $me->id,         // sender
-            'type'         => $notifType,
-        ]);
+            // Create notification only for 'like' or 'match'
+            Notification::create([
+                'user_id'      => $targetId,
+                'from_user_id' => $me->id,
+                'type'         => $isMutualLike ? 'match' : 'like',
+            ]);
+        }
 
-        // Optional: you could also play sound or refresh UI
+        session()->put('current_tab', $this->tab);
+
+        // Force full page reload to avoid snapshot inconsistencies
         $this->dispatch('reload');
+    }
+
+    public function loadUsers(): void
+    {
+        $me = Auth::user();
+        if (!$me) return;
+
+        $received = array_filter($me->likesReceived()->pluck('user_id')->all());
+        $sent     = array_filter($me->likesGiven()->pluck('target_user_id')->all());
+        $disliked = array_filter($me->dislikesGiven()->pluck('target_user_id')->all());
+        $mutual   = array_values(array_intersect($received, $sent));
+
+        $this->users['all']      = User::where('id', '!=', $me->id)->get();
+        $this->users['like']     = $received ? User::whereIn('id', $received)->get() : collect();
+        $this->users['likeSent'] = $sent ? User::whereIn('id', $sent)->get() : collect();
+        $this->users['dislike']  = $disliked ? User::whereIn('id', $disliked)->get() : collect();
+        $this->users['match']    = $mutual ? User::whereIn('id', $mutual)->get() : collect();
+    }
+
+    public function startChat(int $otherId): void
+    {
+        $me = Auth::id();
+
+        // Prevent chat with self
+        if ($me === $otherId) return;
+
+        // Check if a conversation already exists
+        $conversation = Conversation::where(function ($query) use ($me, $otherId) {
+            $query->where('user_one_id', $me)->where('user_two_id', $otherId);
+        })->orWhere(function ($query) use ($me, $otherId) {
+            $query->where('user_one_id', $otherId)->where('user_two_id', $me);
+        })->first();
+
+        // If not found, create new conversation
+        if (!$conversation) {
+            $conversation = Conversation::create([
+                'user_one_id' => $me,
+                'user_two_id' => $otherId,
+            ]);
+        }
+
+        // Redirect to chat box
+        redirect()->route('chat.box', ['conversation' => $conversation->id]);
     }
 
     public function render()
