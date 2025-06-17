@@ -20,7 +20,7 @@
   <link rel="manifest" href="{{ asset('manifest.json') }}"> -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-  <title>GayDating</title>
+  <title>Dating</title>
 </head>
 
 <body>

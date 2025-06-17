@@ -13,5 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         // You can call other seeders here, e.g.:
         $this->call(CitySeeder::class);
+        $this->call(UserSeeder::class);
+
     }
 }
