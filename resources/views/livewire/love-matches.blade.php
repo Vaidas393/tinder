@@ -37,7 +37,7 @@
       <div class="row g-3">
         @forelse($users[$tab] as $other)
           @php $photos = array_filter([$other->photo1, $other->photo2, $other->photo3]); @endphp
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <div class="d-flex justify-content-center">
               <div class="card shadow-lg" style="width: 340px; border-radius: 2.5rem; overflow: hidden;">
                 <div class="user-info px-3 py-2 text-center" style="border-radius: 2.5rem 2.5rem 0 0; background: rgba(255,255,255,0.98); box-shadow: 0 2px 12px rgba(0,0,0,0.04); position: relative; z-index: 2;">
