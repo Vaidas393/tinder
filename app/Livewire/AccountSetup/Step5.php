@@ -69,7 +69,7 @@ class Step5 extends Component
         // Clean registration session
         Session::forget('signup');
 
-        return redirect()->route('dashboard');
+        return redirect()->route('home');
     }
 
     private function storeCompressed($photo, $name)
