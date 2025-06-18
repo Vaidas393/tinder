@@ -25,7 +25,21 @@
 
     {{-- tab content --}}
     <div class="tab-content mt-4">
-      <div class="row g-3">
+      <div 
+        class="row g-3"
+        x-data="{ loading: false }"
+        x-init="
+          let el = $el;
+          el.addEventListener('scroll', () => {
+            if (loading) return;
+            if (el.scrollTop + el.clientHeight >= el.scrollHeight - 200) {
+              loading = true;
+              $wire.loadMore().then(() => loading = false);
+            }
+          });
+        "
+        style="max-height: 70vh; overflow-y: auto;"
+      >
         @forelse($users[$tab] as $other)
           @php $photos = array_filter([$other->photo1, $other->photo2, $other->photo3]); @endphp
           <div class="col-12 col-md-6">
@@ -91,6 +105,13 @@
         @empty
           <p class="text-center w-100">{{ __('messages.no_users_here') }}</p>
         @endforelse
+        @if($hasMore)
+          <div class="w-100 d-flex justify-content-center my-3">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        @endif
       </div>
     </div>
 

@@ -15,6 +15,7 @@ class ChatBox extends Component
     public $newMessage = '';
     public $editingMessageId = null;
     public $editingMessageText = '';
+    public $shouldScroll = false;
 
     protected $listeners = ['message-received' => 'refreshMessages'];
 
@@ -28,6 +29,7 @@ class ChatBox extends Component
     public function loadMessages()
     {
         $this->messages = $this->conversation->messages()->with('sender')->get();
+        $this->shouldScroll = true;
     }
 
     public function markMessagesAsRead()
@@ -58,6 +60,7 @@ class ChatBox extends Component
     {
         $this->loadMessages();
         $this->markMessagesAsRead();
+        $this->shouldScroll = true;
     }
 
     public function startEditing($messageId)

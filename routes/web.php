@@ -13,6 +13,7 @@ use App\Livewire\NotificationsPage;
 use App\Http\Middleware\SetUserLocale;
 use App\Models\Conversation;
 use App\Livewire\ChatBox;
+use App\Livewire\ChatList;
 
 // Public homepage
 Route::get('/', function () {
@@ -46,6 +47,7 @@ Route::middleware(['auth', 'verified', SetUserLocale::class])->group(function ()
     Route::get('/editprofile', EditProfile::class)->name('editProfile');
     Route::get('/matches', LoveMatches::class)->name('matches');
     Route::get('/notifications', NotificationsPage::class)->name('notifications');
+    Route::get('/chat-list', ChatList::class)->name('chat.list');
 
     // Profile routes
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');

@@ -43,5 +43,31 @@
     <script src="{{ asset('js/main.js') }}"></script>
     <script src="{{ asset('js/myjs.js') }}"></script>
 
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo/dist/echo.iife.js"></script>
+    <script>
+        document.addEventListener('livewire:load', function () {
+            const conversationId = @json(request()->route('conversation')->id ?? null);
+            if (!conversationId) return;
+            const appKey = @json(config('broadcasting.connections.reverb.key'));
+            window.Echo = new Echo({
+                broadcaster: 'pusher',
+                key: appKey,
+                wsHost: window.location.hostname,
+                wsPort: 6001,
+                wssPort: 6001,
+                forceTLS: false,
+                disableStats: true,
+                enabledTransports: ['ws', 'wss'],
+            });
+            window.Echo.private('chat.' + conversationId)
+                .listen('MessageSent', (data) => {
+                    console.log('MessageSent event received:', data);
+                    window.Livewire.dispatch('message-received');
+                });
+        });
+    </script>
+    @endpush
+
 </body>
 </html>
