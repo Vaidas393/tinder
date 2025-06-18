@@ -7,6 +7,10 @@
             <div class="d-between">
                 <a href="{{ route('home') }}"><i class="bi bi-arrow-left text-gradient fs-xl fw-500"></i></a>
                 <h3 class="tcn-800">{{ __('messages.edit_profile') }}</h3>
+                <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-danger ms-2">{{ __('messages.logout') }}</button>
+                </form>
             </div>
         </div>
 

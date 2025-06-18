@@ -7,9 +7,6 @@
         <div class="header-area mt-5 mb-4">
             <div class="d-between">
                 <h3 class="tcn-800">{{ __('messages.notifications') }}</h3>
-                <div class="line-bar rounded bgp2-50 py-1 px-2">
-                    <i class="bi bi-text-center fs-lg tcp-2-300"></i>
-                </div>
             </div>
         </div>
 
