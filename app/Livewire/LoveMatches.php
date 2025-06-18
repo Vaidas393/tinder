@@ -127,15 +127,16 @@ class LoveMatches extends Component
         $this->loadUsers(true);
     }
 
-    public function startChat(int $otherId): void
+    public function startChat(int $otherId)
     {
+        echo "<script>alert('hi');</script>";
         $me = Auth::id();
 
         // Prevent chat with self
         if ($me === $otherId) return;
 
         // Check if a conversation already exists
-        $conversation = Conversation::where(function ($query) use ($me, $otherId) {
+        $conversation = \App\Models\Conversation::where(function ($query) use ($me, $otherId) {
             $query->where('user_one_id', $me)->where('user_two_id', $otherId);
         })->orWhere(function ($query) use ($me, $otherId) {
             $query->where('user_one_id', $otherId)->where('user_two_id', $me);
@@ -143,14 +144,13 @@ class LoveMatches extends Component
 
         // If not found, create new conversation
         if (!$conversation) {
-            $conversation = Conversation::create([
+            $conversation = \App\Models\Conversation::create([
                 'user_one_id' => $me,
                 'user_two_id' => $otherId,
             ]);
         }
 
-        // Redirect to chat box
-        redirect()->route('chat.box', ['conversation' => $conversation->id]);
+        $this->redirectRoute('chat.box', ['conversation' => $conversation->id]);
     }
 
     public function render()
