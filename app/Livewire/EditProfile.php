@@ -161,6 +161,16 @@ class EditProfile extends Component
         return 'users/' . $filename;
     }
 
+    public function logout()
+    {
+        auth()->logout();
+
+        session()->invalidate();
+        session()->regenerateToken();
+
+        return redirect()->route('login'); // or route('home') if you prefer
+    }
+
     public function render()
     {
         return view('livewire.edit-profile')->layout('layouts.app');
