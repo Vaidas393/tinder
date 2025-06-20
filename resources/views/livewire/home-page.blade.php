@@ -8,12 +8,6 @@
         $photos = array_filter([$user->photo1, $user->photo2, $user->photo3]);
       @endphp
 
-      <div class="header-area mt-5 mb-4">
-        <div class="d-between">
-          <a href="{{ route('home') }}"><i class="bi bi-arrow-left text-gradient fs-xl fw-500"></i></a>
-          <h3 class="tcn-800">{{ __('messages.edit_profile') }}</h3>
-        </div>
-      </div>
 
       <div class="d-flex justify-content-center">
         <div class="card shadow-lg" style="width: 340px; border-radius: 2.5rem; overflow: hidden;">
