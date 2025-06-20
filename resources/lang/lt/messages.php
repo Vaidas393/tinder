@@ -18,6 +18,7 @@ return [
     'like' => 'Patinka',
     'dislike' => 'Nepatinka',
     'match' => 'Sutapimas',
+    'search_city' => 'Ieškoti',
     'like_sent' => 'Išsiųsti patikimai',
 
     // Units & Info

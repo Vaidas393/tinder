@@ -6,6 +6,6 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('chat.{conversationId}', function ($user, $conversationId) {
-    return true; // Later: restrict if user is in conversation
+Broadcast::channel('chat-messages', function ($user) {
+    return $user !== null;
 });

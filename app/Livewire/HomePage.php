@@ -9,23 +9,22 @@ use App\Models\Notification;
 
 class HomePage extends Component
 {
-    public $page = 1;
+    public $index = 0;
+    public $availableUsers;
 
     public function mount()
     {
-        $this->page = request()->get('page', 1);
+        $this->availableUsers = User::where('id', '!=', auth()->id())
+            ->whereDoesntHave('likedBy', fn($q) => $q->where('user_id', auth()->id()))
+            ->latest()
+            ->get()
+            ->values(); // Reset keys for clean indexing
     }
 
     public function like($type)
     {
-        $users = User::where('id', '!=', auth()->id())
-            ->whereDoesntHave('likedBy', fn($q) => $q->where('user_id', auth()->id()))
-            ->latest()
-            ->paginate(1, ['*'], 'page', $this->page);
-
-        $currentUser = $users->first();
-
-        if ($currentUser) {
+        if (isset($this->availableUsers[$this->index])) {
+            $currentUser = $this->availableUsers[$this->index];
             $me = auth()->user();
 
             Like::updateOrCreate(
@@ -35,9 +34,9 @@ class HomePage extends Component
 
             if ($type === 'like') {
                 $alreadyLikedMe = Like::where('user_id', $currentUser->id)
-                                      ->where('target_user_id', $me->id)
-                                      ->where('type', 'like')
-                                      ->exists();
+                    ->where('target_user_id', $me->id)
+                    ->where('type', 'like')
+                    ->exists();
 
                 $notifType = $alreadyLikedMe ? 'match' : 'like';
 
@@ -47,19 +46,14 @@ class HomePage extends Component
                     'type' => $notifType,
                 ]);
             }
-        }
 
-        $this->page++;
+            $this->index++;
+        }
     }
 
     public function render()
     {
-        $users = User::where('id', '!=', auth()->id())
-            ->whereDoesntHave('likedBy', function($q) {
-                $q->where('user_id', auth()->id());
-            })
-            ->latest()
-            ->paginate(1, ['*'], 'page', $this->page);
-        return view('livewire.home-page', compact('users'))->layout('layouts.app');
+        $user = $this->availableUsers[$this->index] ?? null;
+        return view('livewire.home-page', compact('user'))->layout('layouts.app');
     }
 }

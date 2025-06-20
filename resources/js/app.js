@@ -1,7 +1,21 @@
 import './bootstrap';
+import 'emoji-picker-element';
 
-import Alpine from 'alpinejs';
+window.insertEmojiToInput = function(emoji) {
+    const input = document.querySelector('.input-msg-text');
+    if (input) {
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        const value = input.value;
+        input.value = value.substring(0, start) + emoji + value.substring(end);
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.focus();
+        input.selectionStart = input.selectionEnd = start + emoji.length;
+    }
+}
 
-window.Alpine = Alpine;
+// import Alpine from 'alpinejs';
 
-Alpine.start();
+// window.Alpine = Alpine;
+
+// Alpine.start();

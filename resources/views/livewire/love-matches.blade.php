@@ -59,15 +59,15 @@
                     <span>{{ __('messages.' . $other->position) }}</span>
                   </div>
                   <div class="d-flex justify-content-center gap-5 mt-2">
-                    <button wire:click="react({{ $other->id }}, 'dislike')" class="story-btn">
+                    <button wire:click="react({{ $other->id }}, 'dislike')" class="story-btn" @if($reacting) disabled @endif>
                       <i class="bi bi-x-lg fs-2" title="{{ __('messages.dislike') }}"></i>
                     </button>
-                    <button wire:click="react({{ $other->id }}, 'like')" class="story-btn">
+                    <button wire:click="react({{ $other->id }}, 'like')" class="story-btn" @if($reacting) disabled @endif>
                       <i class="bi bi-suit-heart-fill fs-2" title="{{ __('messages.like') }}"></i>
                     </button>
                     @if($tab === 'match')
                       <div class="text-center mt-2">
-                        <button wire:click="startChat({{ $other->id }})" class="btn btn-outline-primary rounded-pill px-4 py-1">
+                        <button class="btn btn-outline-primary rounded-pill px-4 py-1" wire:click="startChat({{ $other->id }})">
                           <i class="bi bi-chat-dots me-1"></i> {{ __('messages.chat') }}
                         </button>
                       </div>

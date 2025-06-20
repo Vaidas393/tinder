@@ -27,6 +27,13 @@ class NotificationsPage extends Component
         }
     }
 
+    public function markAllAsRead()
+    {
+        Notification::where('user_id', Auth::id())
+            ->where('read', false)
+            ->update(['read' => true]);
+    }
+
     public function render()
     {
         $notifications = Notification::where('user_id', Auth::id())

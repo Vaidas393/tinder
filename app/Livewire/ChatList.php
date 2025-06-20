@@ -3,13 +3,17 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Conversation;
-use App\Models\Message;
+use App\Models\User;
+use App\Models\Chat;
 
 class ChatList extends Component
 {
     public $conversations = [];
+
+    protected $listeners = [
+        'echo-private:chat-messages,ChatMessageSent' => 'refreshConversations',
+        'echo-private:chat-messages,ChatMessageDeleted' => 'refreshConversations',
+    ];
 
     public function mount()
     {
@@ -18,30 +22,35 @@ class ChatList extends Component
 
     public function loadConversations()
     {
-        $userId = Auth::id();
-
-        $this->conversations = Conversation::with(['userOne', 'userTwo', 'messages' => fn ($q) => $q->latest()->take(1)])
-            ->where(function ($query) use ($userId) {
-                $query->where('user_one_id', $userId)
-                      ->orWhere('user_two_id', $userId);
-            })
-            ->latest('updated_at')
-            ->get();
+        $userId = auth()->id();
+        $conversations = Chat::where('sender_id', $userId)
+            ->orWhere('receiver_id', $userId)
+            ->with(['sender', 'receiver'])
+            ->orderByDesc('created_at')
+            ->get()
+            ->groupBy(function($chat) use ($userId) {
+                return $chat->sender_id == $userId ? $chat->receiver_id : $chat->sender_id;
+            });
+        $this->conversations = $conversations->map(function($group) {
+            return $group->all();
+        })->toArray();
     }
 
-    public function getOtherUser($conversation)
+    public function refreshConversations()
     {
-        return Auth::id() === $conversation->user_one_id
-            ? $conversation->userTwo
-            : $conversation->userOne;
+        $this->loadConversations();
     }
 
-    public function unreadCount($conversation)
+    public function deleteConversation($userId)
     {
-        return Message::where('conversation_id', $conversation->id)
-            ->where('sender_id', '!=', Auth::id())
-            ->where('read', false)
-            ->count();
+        $authId = auth()->id();
+        Chat::where(function($q) use ($authId, $userId) {
+            $q->where('sender_id', $authId)->where('receiver_id', $userId);
+        })->orWhere(function($q) use ($authId, $userId) {
+            $q->where('sender_id', $userId)->where('receiver_id', $authId);
+        })->delete();
+        $this->loadConversations();
+        // Optionally broadcast a delete event if you want to update other users' lists
     }
 
     public function render()

@@ -25,6 +25,7 @@ return [
     'like' => 'Like',
     'dislike' => 'Dislike',
     'match' => 'Match',
+    'search_city' => 'search',
     'like_sent' => 'Like Sent',
 
     // Genders

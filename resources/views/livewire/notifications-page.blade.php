@@ -7,6 +7,9 @@
         <div class="header-area mt-5 mb-4">
             <div class="d-between">
                 <h3 class="tcn-800">{{ __('messages.notifications') }}</h3>
+                <button wire:click="markAllAsRead" class="btn btn-sm btn-outline-primary ms-2">
+                    {{ __('Mark all as read') }}
+                </button>
             </div>
         </div>
 

@@ -30,6 +30,7 @@ class LoveMatches extends Component
     ];
     public int $perPage = 10;
     public bool $hasMore = true;
+    public bool $reacting = false;
 
     public function mount(): void
     {
@@ -57,7 +58,15 @@ class LoveMatches extends Component
         session()->put('current_tab', $tab);
         $this->page[$tab] = 1;
         $this->users[$tab] = [];
+        $this->hasMore = true;
         $this->loadUsers(true);
+        // Always refresh all tabs to ensure consistency
+        foreach (['all', 'like', 'likeSent', 'dislike', 'match'] as $refreshTab) {
+            if ($refreshTab !== $tab) {
+                $this->page[$refreshTab] = 1;
+                $this->users[$refreshTab] = [];
+            }
+        }
     }
 
     public function loadUsers($reset = false): void
@@ -101,14 +110,20 @@ class LoveMatches extends Component
 
     public function react(int $targetId, string $type): void
     {
+        if ($this->reacting) return;
+        $this->reacting = true;
+
         $me = Auth::user();
         if (!$me || $me->id === $targetId || !in_array($type, ['like', 'dislike'])) {
+            $this->reacting = false;
             return;
         }
+
         Like::updateOrCreate(
             ['user_id' => $me->id, 'target_user_id' => $targetId],
             ['type' => $type]
         );
+
         $isMutualLike = false;
         if ($type === 'like') {
             $isMutualLike = Like::where('user_id', $targetId)
@@ -121,36 +136,41 @@ class LoveMatches extends Component
                 'type'         => $isMutualLike ? 'match' : 'like',
             ]);
         }
-        session()->put('current_tab', $this->tab);
-        $this->page[$this->tab] = 1;
-        $this->users[$this->tab] = [];
+
+        // Always refresh all tabs to ensure UI is up-to-date
+        foreach (['all', 'like', 'likeSent', 'dislike', 'match'] as $tab) {
+            $this->page[$tab] = 1;
+            $this->users[$tab] = [];
+        }
+        $this->hasMore = true;
         $this->loadUsers(true);
+
+        $this->reacting = false;
     }
 
     public function startChat(int $otherId)
     {
-        echo "<script>alert('hi');</script>";
         $me = Auth::id();
-
-        // Prevent chat with self
         if ($me === $otherId) return;
 
-        // Check if a conversation already exists
-        $conversation = \App\Models\Conversation::where(function ($query) use ($me, $otherId) {
-            $query->where('user_one_id', $me)->where('user_two_id', $otherId);
-        })->orWhere(function ($query) use ($me, $otherId) {
-            $query->where('user_one_id', $otherId)->where('user_two_id', $me);
+        // Check if a chat already exists (either direction)
+        $chat = \App\Models\Chat::where(function($q) use ($me, $otherId) {
+            $q->where('sender_id', $me)->where('receiver_id', $otherId);
+        })->orWhere(function($q) use ($me, $otherId) {
+            $q->where('sender_id', $otherId)->where('receiver_id', $me);
         })->first();
 
-        // If not found, create new conversation
-        if (!$conversation) {
-            $conversation = \App\Models\Conversation::create([
-                'user_one_id' => $me,
-                'user_two_id' => $otherId,
+        // If no chat exists, create a new one (with empty message)
+        if (!$chat) {
+            $chat = \App\Models\Chat::create([
+                'sender_id' => $me,
+                'receiver_id' => $otherId,
+                'message' => '',
             ]);
         }
 
-        $this->redirectRoute('chat.box', ['conversation' => $conversation->id]);
+        // Redirect to chat box route (by user id)
+        return redirect()->route('chat.box', ['user' => $otherId]);
     }
 
     public function render()

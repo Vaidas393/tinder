@@ -9,11 +9,11 @@ use App\Livewire\AccountSetup\Step5;
 use App\Livewire\HomePage;
 use App\Livewire\EditProfile;
 use App\Livewire\LoveMatches;
-use App\Livewire\NotificationsPage;
-use App\Http\Middleware\SetUserLocale;
-use App\Models\Conversation;
 use App\Livewire\ChatBox;
 use App\Livewire\ChatList;
+use App\Livewire\NotificationsPage;
+use App\Http\Middleware\SetUserLocale;
+
 
 // Public homepage
 Route::get('/', function () {
@@ -22,7 +22,6 @@ Route::get('/', function () {
     }
     return redirect()->route('login');
 });
-Route::middleware(['auth'])->get('/chat/{conversation}', ChatBox::class)->name('chat.box');
 
 // Guest-only routes (registration steps)
 Route::middleware('guest')->group(function () {
@@ -42,12 +41,14 @@ Route::middleware('guest')->group(function () {
 
 // Authenticated routes
 Route::middleware(['auth', 'verified', SetUserLocale::class])->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
+    Route::get('/home', fn () => view('dashboard'))->name('dashboard');
     Route::get('/home', HomePage::class)->name('home');
     Route::get('/editprofile', EditProfile::class)->name('editProfile');
     Route::get('/matches', LoveMatches::class)->name('matches');
     Route::get('/notifications', NotificationsPage::class)->name('notifications');
-    Route::get('/chat-list', ChatList::class)->name('chat.list');
+    Route::get('/chat', ChatList::class)->name('chat.list');
+    Route::get('/chat/{user}', ChatBox::class)->name('chat.box');
+
 
     // Profile routes
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');

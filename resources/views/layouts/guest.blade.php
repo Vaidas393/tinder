@@ -7,17 +7,11 @@
   <meta name="theme-color" content="dark light">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/bootstrap-icons.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/swiper.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/nice-select.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/css/bootstrap.min.css" integrity="sha512-fw7f+TcMjTb7bpbLJZlP8g2Y4XcCyFZW8uy8HsRZsH/SwbMw0plKHFHr99DN3l04VsYNwvzicUX/6qurvIxbxw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
   <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
-  <!-- Livewire Styles (Auto-injected in Livewire 3) -->
-
-  <!-- <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" type="image/x-icon">
-  <link rel="manifest" href="{{ asset('manifest.json') }}"> -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
   <title>Dating</title>
@@ -25,18 +19,23 @@
 
 <body>
 
+    <!-- Preloader section -->
+    <!-- <div id="preloader">
+        <div class="img-container">
+            <img class="img-fluid" src="{{ asset('images/logo.png') }}" alt="logo">
+        </div>
+    </div> -->
+
 
   <!-- Content -->
   @yield('content')
 
-  <!-- JavaScript Files -->
-  <!-- Load jQuery FIRST (some plugins depend on it) -->
-  <script src="{{ asset('js/jquery.min.js') }}"></script>
-  <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-  <script src="{{ asset('js/swiper.min.js') }}"></script>
-  <script src="{{ asset('js/nice-select.min.js') }}"></script>
-  <script src="{{ asset('js/main.js') }}"></script>
-  <script src="{{ asset('js/myjs.js') }}"></script>
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/js/bootstrap.min.js" integrity="sha512-zKeerWHHuP3ar7kX2WKBSENzb+GJytFSBL6HrR2nPSR1kOX1qjm+oHooQtbDpDBSITgyl7QXZApvDfDWvKjkUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('js/myjs.js') }}"></script>
+
+
 
 </body>
 </html>
