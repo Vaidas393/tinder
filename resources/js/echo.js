@@ -9,6 +9,7 @@ window.Echo = new Echo({
     wsHost: import.meta.env.VITE_REVERB_HOST,
     wsPort: Number(import.meta.env.VITE_REVERB_PORT),
     wssPort: Number(import.meta.env.VITE_REVERB_PORT),
+    wsPath: '/app', // ✅ this is the missing piece
     forceTLS: import.meta.env.VITE_REVERB_SCHEME === 'https',
     enabledTransports: ['ws', 'wss'],
 });
